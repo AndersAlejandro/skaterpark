@@ -22,8 +22,8 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const data = req.body
-    
-    // Agregar photo
+
+
     const result = await createSkater(data)
 
     res.json({
@@ -41,14 +41,12 @@ router.post("/", async (req, res) => {
 router.put("/", async (req, res) => {
   try {
     const data = req.body
-    // Analiza si estado viene vacío y lo define falso
+
     if (!data.estado) {
       data.estado = false
     }
 
     const result = await updateSkater(data)
-
-    console.log("RESULT", result)
     res.json({
       message: 'Updated skater',
       skater: result.rows

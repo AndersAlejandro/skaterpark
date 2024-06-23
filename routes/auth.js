@@ -5,24 +5,23 @@ import path from 'node:path'
 
 const router = Router()
 
-// Login
+
 router.post("/login", async (req, res) => {
   try {
-    // revisa si usuario existe
+
     const data = req.body
     const skater = await getSkater(data)
     if (skater.rowCount == 0) {
       res.status(404).json({
-        message: 'User no existe o password incorrecto'
+        message: 'User no existe o contraseña incorrecta'
       })
     } else {
       if (req.body.password != skater.rows[0].password) {
         res.status(400).json({
-          message: 'User no existe o password incorrecto'
+          message: 'User no existe o contraseña incorrecta'
         })
       } else {
-        // firmamos JWT
-        const payload = { 
+        const payload = {
           email: skater.rows[0].email,
           nombre: skater.rows[0].nombre,
           anos_experiencia: skater.rows[0].anos_experiencia,
@@ -31,7 +30,7 @@ router.post("/login", async (req, res) => {
         }
 
         const secret = process.env.JWT_SECRET
-        const token = jwt.sign(payload, secret, { expiresIn: '1d'})
+        const token = jwt.sign(payload, secret, { expiresIn: '1d' })
 
         res.json({
           token: token
@@ -45,46 +44,35 @@ router.post("/login", async (req, res) => {
     console.error(error)
   }
 })
-// Registro
+
 router.post("/registro", async (req, res) => {
   try {
-  const { email } = req.body
-  const data = req.body
-  
-  const isSkater = await getSkater({email})
+    const { email } = req.body
+    const data = req.body
 
-  if (isSkater.rowCount > 0) {
-    res.status(401).json({
-      message: 'El usuario ya existe'
-    })
-  } else {
-    const file = req.files.foto
+    const isSkater = await getSkater({ email })
 
-    // Definir ruta para guardar foto y ruta para "consultar desde front"
-    const photoURL = path.join(import.meta.dirname, "../static/photos", file.name)
-    const dbURL = path.join("photos", file.name) // ruta src
-    
-    file.mv(photoURL) // guarda archivo en carpeta correspondiente
-    
-    data.foto = dbURL
+    if (isSkater.rowCount > 0) {
+      res.status(401).json({
+        message: 'El usuario ya existe'
+      })
+    } else {
+      const file = req.files.foto
 
-    const result = await createSkater(data)
 
-    const secret = process.env.JWT_SECRET
-    const payload = {
-      email: email,
-      nombre: data.nombre,
-      anos_experiencia: data.anos_experiencia,
-      especialidad: data.especialidad,
+      const photoURL = path.join(import.meta.dirname, "../static/photos", file.name)
+      const dbURL = path.join("photos", file.name)
+
+      file.mv(photoURL)
+
+      data.foto = dbURL
+
+      const result = await createSkater(data)
+
+      res.json({
+        message: 'User creado'
+      })
     }
-
-    const token = jwt.sign(payload, secret, {expiresIn: '1d'})
-
-    res.json({
-      token: token,
-      message: 'User creado'
-    })
-  }
   } catch (error) {
     res.status(500).json({
       message: 'Error interno de servidor'
@@ -93,4 +81,4 @@ router.post("/registro", async (req, res) => {
   }
 })
 
-export {router}
+export { router }

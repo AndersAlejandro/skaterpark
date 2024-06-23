@@ -18,23 +18,25 @@
     </thead>
     <tbody>
       {{#each skaters}}
-        <tr>
-          <th scope="row">{{this.id}}</th>
-          <td><div><img src="{{this.foto}}" alt="foto {{this.nombre}}" style="width: inherit;"></div></td>
-          <td>{{this.nombre}}</td>
-          <td>{{this.anos_experiencia}}</td>
-          <td>{{this.especialidad}}</td>
+      <tr>
+        <th scope="row">{{this.id}}</th>
+        <td>
+          <div><img src="{{this.foto}}" alt="foto {{this.nombre}}" style="width: inherit;"></div>
+        </td>
+        <td>{{this.nombre}}</td>
+        <td>{{this.anos_experiencia}}</td>
+        <td>{{this.especialidad}}</td>
 
-          {{#if skater.estado}}
-          <td class="text-success font-weight-bold">
-              aprobado
-          </td>
-          {{else}}
-          <td class="text-warning font-weight-bold">
-              pendiente
-          </td>
-          {{/if}}
-        </tr>
+        {{#if this.estado}}
+        <td class="text-success font-weight-bold">
+          aprobado
+        </td>
+        {{else}}
+        <td class="text-warning font-weight-bold">
+          pendiente
+        </td>
+        {{/if}}
+      </tr>
       {{/each}}
     </tbody>
   </table>

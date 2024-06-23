@@ -1,0 +1,53 @@
+<h1>Skate Park</h1>
+
+<div class="py-4">
+    <h2>Lista de participantes</h2>
+
+    <hr />
+
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Foto</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Años de experiencia</th>
+                <th scope="col">Especialidad</th>
+                <th scope="col">Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each skaters}}
+            <tr>
+                <th scope="row">{{this.id}}</th>
+                <td>
+                    <div><img src="{{this.foto}}" alt="foto {{this.nombre}}" style="width: inherit;"></div>
+                </td>
+                <td>{{this.nombre}}</td>
+                <td>{{this.anos_experiencia}}</td>
+                <td>{{this.especialidad}}</td>
+
+                {{#if this.estado}}
+                <td class="text-success font-weight-bold">
+                    aprobado
+                </td>
+                {{else}}
+                <td class="text-warning font-weight-bold">
+                    pendiente
+                </td>
+                {{/if}}
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <a href="/">Salir</a>
+    <button class="btn-secondary" id="datos">Actualizar datos</button>
+</div>
+
+<script>
+    document.getElementById('datos').addEventListener('click', () => {
+
+        const token = sessionStorage.getItem('token');
+        window.location = `/datos?token=${token}`;
+    });
+</script>
